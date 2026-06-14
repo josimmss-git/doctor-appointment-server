@@ -9,7 +9,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors());
@@ -85,19 +85,38 @@ async function run() {
     // ==========================
     // Get User Appointments
     // ==========================
-    app.get("/appointments/:email", async (req, res) => {
-      try {
-        const email = req.params.email;
-
-        const result = await appointmentsCollection
-          .find({ userEmail: email })
-          .toArray();
-
-        res.send(result);
-      } catch (error) {
-        res.status(500).send({ error: error.message });
-      }
+    app.get("/appointments", async (req, res) => {
+      const result = await appointmentsCollection.find().toArray()
+      res.json(result);
     });
+
+    // server এ এটা আছে কিনা দেখো
+app.get("/appointments/:email", async (req, res) => {
+  try {
+    const email = decodeURIComponent(req.params.email); // ← এই লাইন যোগ করো
+    const result = await appointmentsCollection
+      .find({ userEmail: email })
+      .toArray();
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+    
+    app.patch("/appointments/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body; // ← এটা যোগ করো
+
+    const result = await appointmentsCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedData } // ← এটা ঠিক করো
+    );
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
 
     // ==========================
     // Delete Appointment
