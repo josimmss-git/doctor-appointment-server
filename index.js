@@ -110,7 +110,7 @@ app.get("/appointments/:email", async (req, res) => {
 
     const result = await appointmentsCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: updatedData } // ← এটা ঠিক করো
+      { $set: updatedData } // 
     );
     res.send(result);
   } catch (error) {
