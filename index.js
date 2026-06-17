@@ -95,7 +95,7 @@ app.get("/appointments/:email", async (req, res) => {
   try {
     const email = decodeURIComponent(req.params.email); // ← এই লাইন যোগ করো
     const result = await appointmentsCollection
-      .find({ userEmail: email })
+     .find({ $or: [{ userEmail: email }, { email: email }] })
       .toArray();
     res.send(result);
   } catch (error) {
@@ -176,3 +176,4 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);
 });
+
