@@ -27,7 +27,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const db = client.db("doctor_appointment");
 
@@ -90,10 +90,10 @@ async function run() {
       res.json(result);
     });
 
-    // server এ এটা আছে কিনা দেখো
+  
 app.get("/appointments/:email", async (req, res) => {
   try {
-    const email = decodeURIComponent(req.params.email); // ← এই লাইন যোগ করো
+    const email = decodeURIComponent(req.params.email); 
     const result = await appointmentsCollection
      .find({ $or: [{ userEmail: email }, { email: email }] })
       .toArray();
@@ -106,7 +106,7 @@ app.get("/appointments/:email", async (req, res) => {
     app.patch("/appointments/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const updatedData = req.body; // ← এটা যোগ করো
+    const updatedData = req.body; 
 
     const result = await appointmentsCollection.updateOne(
       { _id: new ObjectId(id) },
@@ -118,9 +118,8 @@ app.get("/appointments/:email", async (req, res) => {
   }
 });
 
-    // ==========================
     // Delete Appointment
-    // ==========================
+  
     app.delete("/appointments/:id", async (req, res) => {
       try {
         const id = req.params.id;
@@ -135,9 +134,9 @@ app.get("/appointments/:email", async (req, res) => {
       }
     });
 
-    // ==========================
-    // Update Appointment Status
-    // ==========================
+  
+    // Update 
+   
     app.patch("/appointments/:id", async (req, res) => {
       try {
         const id = req.params.id;
@@ -157,7 +156,7 @@ app.get("/appointments/:email", async (req, res) => {
       }
     });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
 
     console.log("✅ Connected to MongoDB");
   } catch (error) {
